@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="tasks" v-if="tasks">
-      <ProgressBar :tasks="tasks" />
+      <ProgressBar v-show="tasks.length > 0" :tasks="tasks" />
       <li class="tasks__item" v-for="task in sortedTasks" :key="task.id">
         <SingleTask @updateTask="updateTasks" :task="task" />
       </li>
