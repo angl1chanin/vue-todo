@@ -18,7 +18,8 @@
           </form>
         </div>
       </div>
-      <p v-if="tasksLength == 0" class="todo__number-of-tasks">Congrats! All tasks are done</p>
+      <p v-if="tasks.length === 0" class="todo__number-of-tasks">Add your first task!</p>
+      <p v-else-if="tasksLength === 0" class="todo__number-of-tasks">Congrats! All tasks are done</p>
       <p v-else class="todo__number-of-tasks">{{ tasksLength }} tasks</p>
       <div v-if="tasks" class="todo__tasks">
         <TaskList :tasks="tasks" />
