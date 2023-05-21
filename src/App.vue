@@ -22,7 +22,7 @@
       <p v-else-if="tasksLength === 0" class="todo__number-of-tasks">Congrats! All tasks are done</p>
       <p v-else class="todo__number-of-tasks">{{ tasksLength }} tasks</p>
       <div v-if="tasks" class="todo__tasks">
-        <TaskList :tasks="tasks" />
+        <TaskList :tasks="tasks" @removeTask="removeTask" />
       </div>
     </div>
   </div>
@@ -46,6 +46,9 @@ export default {
     };
   },
   methods: {
+    updateLocalStorage() {
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+    },
     handleClick() {
       if (this.taskTitle) {
         this.addTask()
@@ -74,9 +77,13 @@ export default {
           time: this.getTime(),
           done: false,
         });
-        localStorage.setItem('tasks', JSON.stringify(this.tasks))
+        this.updateLocalStorage()
         this.taskTitle = ""
       }
+    },
+    removeTask(task) {
+      this.tasks = this.tasks.filter(item => item !== task)
+      this.updateLocalStorage()
     }
   },
   computed: {

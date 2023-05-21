@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <div class="checkbox-wrapper-12">
+    <div class="task__checkbox checkbox-wrapper-12">
       <div class="cbx">
         <input
           @click="updateTaskStatus"
@@ -36,6 +36,7 @@
     <div class="task__content" :class="{ task__content_done: task.done }">
       <p class="task__title">{{ task.title }}</p>
       <p class="task__time">{{ task.time }}</p>
+      <button class="task__delete" @click="removeTask">Delete</button>
     </div>
   </div>
 </template>
@@ -53,6 +54,9 @@ export default {
       this.task.done = !this.task.done;
       this.$emit('updateTask')
     },
+    removeTask() {
+      this.$emit('removeTask', this.task)
+    }
   },
 };
 </script>
@@ -63,11 +67,44 @@ export default {
   gap: 15px;
 }
 
+.task__content:hover .task__title,
+.task__content:hover .task__time,
+.task__content:hover::after {
+  opacity: 0;
+}
+
+.task__delete {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .2s linear;
+  width: 100%;
+  border: none;
+  background-color: rgba(251, 141, 141, 0.5);
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.task__content:hover .task__delete {
+  font-family: inherit;
+  font-size: 16px;
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
+  z-index: 2;
+  opacity: 1;
+}
+
+.task__checkbox {
+  transition: opacity .09s linear;
+}
+
 .task__content {
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  position: relative;
+  transition: opacity .09s linear;
 }
 
 .task__content::after {
@@ -98,6 +135,7 @@ export default {
 
 .task__title {
   color: #464850;
+  text-align: left;
 }
 
 .task__time {

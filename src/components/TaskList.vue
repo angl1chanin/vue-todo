@@ -3,7 +3,7 @@
     <ul class="tasks" v-if="tasks">
       <ProgressBar v-show="tasks.length > 0" :tasks="tasks" />
       <li class="tasks__item" v-for="task in tasks" :key="task.id">
-        <SingleTask @updateTask="updateTasks" :task="task" />
+        <SingleTask @updateTask="updateTask" @removeTask="removeTask" :task="task" />
       </li>
     </ul>
     <div v-else class="loading">
@@ -38,8 +38,11 @@ export default {
     SingleTask, ProgressBar,
   },
   methods: {
-    updateTasks() {
+    updateTask() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
+    },
+    removeTask(task) {
+      this.$emit('removeTask', task)
     }
   }
 };
