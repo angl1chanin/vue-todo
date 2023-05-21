@@ -2,7 +2,7 @@
   <div>
     <ul class="tasks" v-if="tasks">
       <ProgressBar v-show="tasks.length > 0" :tasks="tasks" />
-      <li class="tasks__item" v-for="task in sortedTasks" :key="task.id">
+      <li class="tasks__item" v-for="task in tasks" :key="task.id">
         <SingleTask @updateTask="updateTasks" :task="task" />
       </li>
     </ul>
@@ -29,21 +29,17 @@ import SingleTask from "./SingleTask.vue";
 
 export default {
   name: "TaskList",
-  props: ["tasks"],
+  props: {
+    tasks: {
+      type: Array
+    }
+  },
   components: {
     SingleTask, ProgressBar,
   },
   methods: {
     updateTasks() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
-    }
-  },
-  computed: {
-    countDoneTasks() {
-      return this.tasks.filter((item) => item.done).length;
-    },
-    sortedTasks() {
-      return this.tasks.sort((a, b) => (a.done === b.done) ? 0 : a.done ? 1 : -1);
     }
   }
 };
@@ -105,6 +101,14 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+@keyframes moveDownAnimation {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 </style>

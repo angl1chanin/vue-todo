@@ -43,7 +43,11 @@
 <script>
 export default {
   name: "SingleTask",
-  props: ["task"],
+  props: {
+    task: {
+      type: Object
+    }
+  },
   methods: {
     updateTaskStatus() {
       this.task.done = !this.task.done;
