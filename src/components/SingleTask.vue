@@ -33,10 +33,18 @@
         </defs>
       </svg>
     </div>
-    <div class="task__content" :class="{ task__content_done: task.done }">
-      <p class="task__title">{{ task.title }}</p>
+    <div class="task__content" :class="{ task__content_done: task.done, task__content_edit: isEdit }">
+      <input class="task__title-edit" type="text" v-model="newTitle" v-if="isEdit">
+      <p class="task__title" v-else>{{ task.title }}</p>
       <p class="task__time">{{ task.time }}</p>
-      <button class="task__delete" @click="removeTask">Delete</button>
+      <div class="task__manage" v-if="isEdit">
+        <button class="task__cancel task__manage-btn" @click="editTask">Cancel</button>
+        <button class="task__confirm task__manage-btn" @click="confirmEditing">Confirm</button>
+      </div>
+      <div class="task__manage task__manage_edit" v-else>
+        <button class="task__edit task__manage-btn" @click="editTask" v-if="!task.done">Edit</button>
+        <button class="task__delete task__manage-btn" @click="removeTask">Delete</button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +57,12 @@ export default {
       type: Object
     }
   },
+  data() {
+    return {
+      isEdit: false,
+      newTitle: this.task.title,
+    }
+  },
   methods: {
     updateTaskStatus() {
       this.task.done = !this.task.done;
@@ -56,6 +70,13 @@ export default {
     },
     removeTask() {
       this.$emit('removeTask', this.task)
+    },
+    editTask() {
+      this.isEdit = !this.isEdit
+    },
+    confirmEditing() {
+      this.isEdit = !this.isEdit
+      this.$emit('confirmEditing', this.task, this.newTitle)
     }
   },
 };
@@ -73,26 +94,59 @@ export default {
   opacity: 0;
 }
 
-.task__delete {
-  position: absolute;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity .2s linear;
-  width: 100%;
-  border: none;
-  background-color: rgba(251, 141, 141, 0.5);
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.task__content:hover .task__delete {
-  font-family: inherit;
-  font-size: 16px;
-  /*display: flex;*/
-  /*align-items: center;*/
-  /*justify-content: center;*/
+.task__content:hover .task__manage {
   z-index: 2;
   opacity: 1;
+}
+
+.task__manage {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  opacity: 0;
+  z-index: -1;
+}
+
+.task__manage_edit {
+
+}
+
+.task__manage-btn {
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: opacity .2s linear, background-color .2s linear;
+}
+
+.task__edit {
+  background-color: rgba(82, 107, 208, 0.5);
+}
+
+.task__edit:hover {
+  background-color: rgba(82, 107, 208, 1);
+}
+
+.task__delete, .task__cancel {
+  background-color: rgba(251, 141, 141, 0.5);
+}
+
+.task__delete:hover, .task__cancel:hover {
+  background-color: rgba(251, 141, 141, 1);
+}
+
+.task__confirm {
+  background-color: rgba(15, 199, 28, 0.5);
+}
+
+.task__confirm:hover {
+  background-color: rgba(15, 199, 28, 1);
 }
 
 .task__checkbox {
@@ -104,7 +158,8 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  transition: opacity .09s linear;
+  opacity: 1;
+  transition: opacity .1s linear;
 }
 
 .task__content::after {
@@ -126,11 +181,26 @@ export default {
   color: #c3c3c3;
 }
 
-.task__status {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+.task__content_edit.task__content::after, .task__content_edit .task__time {
+  display: none;
+}
+
+.task__content_edit .task__manage {
+  opacity: 1;
+  z-index: 2;
+}
+
+.task__title-edit {
+  position: relative;
+  z-index: 3;
   border: none;
+  outline: none;
+  background-color: transparent;
+  border-bottom: 1px solid #c3c3c3;
+  font-family: inherit;
+  font-size: 16px;
+  color: #464850;
+  width: 150px;
 }
 
 .task__title {

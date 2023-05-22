@@ -22,7 +22,7 @@
       <p v-else-if="tasksLength === 0" class="todo__number-of-tasks">Congrats! All tasks are done</p>
       <p v-else class="todo__number-of-tasks">{{ tasksLength }} tasks</p>
       <div v-if="tasks" class="todo__tasks">
-        <TaskList :tasks="tasks" @removeTask="removeTask" />
+        <TaskList :tasks="tasks" @removeTask="removeTask" @confirmEditing="confirmEditing" />
       </div>
     </div>
   </div>
@@ -83,6 +83,15 @@ export default {
     },
     removeTask(task) {
       this.tasks = this.tasks.filter(item => item !== task)
+      this.updateLocalStorage()
+    },
+    confirmEditing(task, newTitle) {
+      this.tasks = this.tasks.map(item => {
+        if (item.id === task.id) {
+          item.title = newTitle
+        }
+        return item
+      })
       this.updateLocalStorage()
     }
   },

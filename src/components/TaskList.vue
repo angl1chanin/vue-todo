@@ -3,7 +3,7 @@
     <ul class="tasks" v-if="tasks">
       <ProgressBar v-show="tasks.length > 0" :tasks="tasks" />
       <li class="tasks__item" v-for="task in tasks" :key="task.id">
-        <SingleTask @updateTask="updateTask" @removeTask="removeTask" :task="task" />
+        <SingleTask @updateTask="updateTask" @removeTask="removeTask" @confirmEditing="confirmEditing" :task="task" />
       </li>
     </ul>
     <div v-else class="loading">
@@ -43,6 +43,9 @@ export default {
     },
     removeTask(task) {
       this.$emit('removeTask', task)
+    },
+    confirmEditing(task, newTitle) {
+      this.$emit('confirmEditing', task, newTitle)
     }
   }
 };
