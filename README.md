@@ -1,5 +1,5 @@
 # Vue To-Do application
-![](https://user-images.githubusercontent.com/68481069/232326808-c23c8dfd-57eb-468a-8f23-49102784127f.gif)
+![](https://github.com/angl1chanin/vue-todo/assets/68481069/1141febc-f71a-4464-ac2e-a53c70d81710)
 
 Vue todo application. It uses localstorage for saving to do tasks.
 
